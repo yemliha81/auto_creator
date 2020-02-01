@@ -8,15 +8,6 @@ class Creator extends CI_Controller {
 		$this->load->view('table_creator_view', $data);
 	}
 
-	public function utf_8($type){
-		if( ($type == "varchar") OR ($type == "text") ){
-			return " COLLATE utf8_unicode_ci";
-		}else{
-			return "";
-		}
-	}
-
-
 	public function table_creator_post()
 	{
 		
@@ -27,18 +18,18 @@ class Creator extends CI_Controller {
 		$query .= "CREATE TABLE IF NOT EXISTS ".$post['table_name']."_table (
 					id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,";
 			foreach($post['field_name'] as $key => $val){
-			
+				
 				$type = $post['field_type'][$key];
 
-			if( ($type == "boolean") OR ( $type == "float" ) ){
-				$query .= "".$val." ".$post['field_type'][$key]." ".$post['null'][$key]." ,";
-			}elseif($type == "text"){
-				$query .= "".$val." ".$post['field_type'][$key]."  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
-			}else{
-				$query .= "".$val." ".$post['field_type'][$key]."   (".$post['char_length'][$key].")  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
+				if( ($type == "boolean") OR ( $type == "float" ) ){
+					$query .= "".$val." ".$post['field_type'][$key]." ".$post['null'][$key]." ,";
+				}elseif($type == "text"){
+					$query .= "".$val." ".$post['field_type'][$key]."  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
+				}else{
+					$query .= "".$val." ".$post['field_type'][$key]."   (".$post['char_length'][$key].")  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
+				}
+				
 			}
-			
-		}
 		$query = substr($query, 0, -1);
 		$query .= " ) ;";
 		
@@ -48,7 +39,7 @@ class Creator extends CI_Controller {
 			
 			$fileName = "application/controllers/".$post['table_name'].".php";
 			$this->create_controller($controller_name, $fileName);
-			$this->create_views($table_name);
+			$this->create_views($table_name, $post);
 			
 			die("Successful!!!");
 		}else{
@@ -57,7 +48,7 @@ class Creator extends CI_Controller {
 
 	}
 
-	public function create_views($table_name){
+	public function create_views($table_name, $post){
 		
 		$table_name_list_view = strtolower($table_name.'_list_view');
 		$table_name_add_view = strtolower($table_name.'_add_view');
@@ -65,21 +56,93 @@ class Creator extends CI_Controller {
 		
 		
 		
-		$views = array( $table_name_list_view , $table_name_add_view, $table_name_update_view );
+		$views = array( 
+					array( 	"type" => "list_view", 
+							"name" => $table_name_list_view),
+					array( 	"type" => "add_view", 
+							"name" => $table_name_add_view),
+					array( 	"type" => "update_view", 
+							"name" => $table_name_update_view)
+				);
 
-		foreach($views as $view){
-			$fileName = "application/views/".$view.".php";
+		foreach($views as $key => $view){
+			$fileName = "application/views/".$view['name'].".php";
 			if(!file_exists($fileName)){
 			
 				touch($fileName);
 				$fp = fopen( $fileName, 'w');
-				fwrite($fp, $this->file_content_creator("view", $view));
+				fwrite($fp, $this->file_view_creator($view['name'], $view['type'], $post));
 				fclose($fp);
 				
 			}
 		}
 
 		
+	}
+
+	public function file_view_creator($viewName, $viewType, $post){
+
+		return $this->view_content($viewName, $viewType, $post);
+		
+	}
+
+	public function view_content($viewName, $viewType, $post){
+		
+		if($viewType == "list_view"){
+			$html .= "<?php include('includes/header.php');?>";
+			$html .= "<div class='col-sm-4'>";
+			foreach($post['field_name'] as $key => $val){
+				$html .= "<p>"; 
+				$html .= $this->return_field_html($post['field_type'][$key], $val);
+				$html .= "</p>";
+			}
+			$html .= "</div>";
+			$html .= "<?php include('includes/footer.php');?>";
+		}
+
+		if($viewType == "add_view"){
+			$html .= "<?php include('includes/header.php');?>";
+			$html .= "<div class='col-sm-4'>";
+			foreach($post['field_name'] as $key => $val){
+				$html .= "<p>"; 
+				$html .= $this->return_field_html($post['field_type'][$key], $val);
+				$html .= "</p>";
+			}
+			$html .= "</div>";
+			$html .= "<?php include('includes/footer.php');?>";
+		}
+
+		if($viewType == "update_view"){
+			$html .= "<?php include('includes/header.php');?>";
+			$html .= "<div class='col-sm-4'>";
+			$html .= "This is update view ....";
+			$html .= "</div>";
+			$html .= "<?php include('includes/footer.php');?>";
+		}
+		
+		
+		return $html;
+		
+	}
+
+	public function return_field_html($type, $name){
+		if( ($type == "int") OR ($type == "bigint") OR ($type == "float") ){
+			return "<input type='number' name='$name' class='form-control' placeholder='$name' />";
+		}
+		if($type == "varchar"){
+			return "<input type='text' name='$name' class='form-control' placeholder='$name' />";
+		}
+		if($type == "text"){
+			return "<textarea name='$name' class='form-control' rows='5' placeholder='$name'></textarea>";
+		}
+	}
+
+	public function file_content_creator($type, $table_name){
+
+		if($type == "controller"){
+			return $this->controller_content($table_name);
+		}
+
 	}
 
 	public function create_controller($controller_name, $fileName){
@@ -90,24 +153,9 @@ class Creator extends CI_Controller {
 			fwrite($fp, $this->file_content_creator("controller", $controller_name));
 			fclose($fp);
 			
+		}else{
+			die("Existing Table!");
 		}
-	}
-
-	public function file_content_creator($type, $table_name){
-
-		if($type == "controller"){
-			return $this->controller_content($table_name);
-		}
-
-		if($type == "view"){
-			return $this->view_content($table_name);
-		}
-		
-
-	}
-
-	public function view_content($view_name){
-		return "This is ".$view_name." content .......";
 	}
 
 	public function controller_content($table_name){
@@ -166,6 +214,14 @@ class Creator extends CI_Controller {
 		?>";
 
 		return strval($content);
+	}
+
+	public function utf_8($type){
+		if( ($type == "varchar") OR ($type == "text") ){
+			return " COLLATE utf8_unicode_ci";
+		}else{
+			return "";
+		}
 	}
 
 
