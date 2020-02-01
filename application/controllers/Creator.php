@@ -15,7 +15,9 @@ class Creator extends CI_Controller {
 		
 		$post = $this->input->post();
 
-		/*CREATE TABLE IF NOT EXISTS 'products_table' (
+		/*
+		test
+		CREATE TABLE IF NOT EXISTS 'products_table' (
 		  'pro_id' int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		  'pro_name' varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 		  'pro_img' varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
