@@ -50,56 +50,39 @@ class Creator extends CI_Controller {
 		if($run){
 			
 			$fileName = "application/controllers/".$post['table_name'].".php";
-
-			if(!file_exists($fileName)){
-				touch($fileName);
-				
-				$fp = fopen( $fileName, 'w');
-				fwrite($fp, $this->file_content_creator($controller_name));
-				fclose($fp);
-				
-			}
+			$this->create_controller($controller_name, $fileName);
+			
 			
 			die("Successful!!!");
 		}else{
 			die("ERROR!!!");
 		}
 
+	}
 
-		/*
-		test
-		CREATE TABLE IF NOT EXISTS 'products_table' (
-		  'pro_id' int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-		  'pro_name' varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-		  'pro_img' varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-		  'pro_barcode' varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-		  'pro_price' decimal(7,2) NOT NULL,
-		  'pro_type' int(11) NOT NULL,
-		  'pro_stock' int(11) NOT NULL,
-		  'cat_id' int(11) NOT NULL,
-		  'unit' varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-		  'gr' decimal(7,2) NOT NULL,
-		  'pro_insert_time' bigint(20) NOT NULL,
-		  'pro_status' int(11) NOT NULL,
-		  'pro_status2' int(11) NOT NULL
-		);*/
-
-
-
+	public function create_controller($controller_name, $fileName){
+		if(!file_exists($fileName)){
+			
+			touch($fileName);
+			$fp = fopen( $fileName, 'w');
+			fwrite($fp, $this->file_content_creator($controller_name));
+			fclose($fp);
+			
+		}
 	}
 
 	public function file_content_creator($table_name){
 
-
-		$table_name_list = $table_name.'_list';
-		$table_name_list_view = $table_name.'_list_view';
-		$table_name_add = $table_name.'_add';
-		$table_name_add_view = $table_name.'_add_view';
-		$table_name_add_post = $table_name.'_add_post';
-		$table_name_update = $table_name.'_update';
-		$table_name_update_view = $table_name.'_update_view';
-		$table_name_update_post = $table_name.'_update_post';
-		$table_name_delete = $table_name.'_delete';
+		$db_table_name = strtolower($table_name.'_table');
+		$table_name_list = strtolower($table_name.'_list');
+		$table_name_list_view = strtolower($table_name.'_list_view');
+		$table_name_add = strtolower($table_name.'_add');
+		$table_name_add_view = strtolower($table_name.'_add_view');
+		$table_name_add_post = strtolower($table_name.'_add_post');
+		$table_name_update = strtolower($table_name.'_update');
+		$table_name_update_view = strtolower($table_name.'_update_view');
+		$table_name_update_post = strtolower($table_name.'_update_post');
+		$table_name_delete = strtolower($table_name.'_delete');
 
 		$content = "<?php
 		defined('BASEPATH') OR exit('No direct script access allowed');
@@ -108,6 +91,8 @@ class Creator extends CI_Controller {
 
 			public function $table_name_list()
 			{
+				\$data['item_list'] = \$this->db->select('*')->get('$db_table_name')->result_array();
+				debug(\$data['item_list']);
 				\$this->load->view('$table_name_list_view', \$data);
 			}
 

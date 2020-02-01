@@ -5,6 +5,8 @@
 
 			public function Product_list()
 			{
+				$data['item_list'] = $this->db->select('*')->get('product_table')->result_array();
+				debug($data['item_list']);
 				$this->load->view('Product_list_view', $data);
 			}
 
@@ -35,4 +37,4 @@
 			
 		}
 
-?>
+		?>
