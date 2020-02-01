@@ -38,6 +38,9 @@ var row = '<div class="row_content first_row">\
 					<option value="bigint">bigint</option>\
 					<option value="varchar">varchar</option>\
 					<option value="text">text</option>\
+					<option value="float">float</option>\
+					<option value="boolean">boolean</option>\
+					<option value="timestamp DEFAULT current_timestamp">timestamp</option>\
 				</select>\
 			</div>\
 			<div class="col-sm-3">\
