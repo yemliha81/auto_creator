@@ -38,7 +38,7 @@ class Creator extends CI_Controller {
 		if($run){
 			
 			$fileName = "application/controllers/".$post['table_name'].".php";
-			$this->create_controller($controller_name, $fileName);
+			$this->create_controller($controller_name, $fileName, $post);
 			$this->create_views($table_name, $post);
 			
 			die("Successful!!!");
@@ -81,12 +81,6 @@ class Creator extends CI_Controller {
 	}
 
 	public function file_view_creator($viewName, $viewType, $post){
-
-		return $this->view_content($viewName, $viewType, $post);
-		
-	}
-
-	public function view_content($viewName, $viewType, $post){
 		
 		if($viewType == "list_view"){
 			$html .= "<?php include('includes/header.php');?>";
@@ -101,13 +95,17 @@ class Creator extends CI_Controller {
 		}
 
 		if($viewType == "add_view"){
+			
 			$html .= "<?php include('includes/header.php');?>";
 			$html .= "<div class='col-sm-4'>";
+			$html .= "<form action='<?php echo \$post_link;?>' method='post'>";
 			foreach($post['field_name'] as $key => $val){
 				$html .= "<p>"; 
 				$html .= $this->return_field_html($post['field_type'][$key], $val);
 				$html .= "</p>";
 			}
+			$html .= "<p><input type='submit' class='btn btn-success' value='SAVE' /></p>";
+			$html .= "</form>";
 			$html .= "</div>";
 			$html .= "<?php include('includes/footer.php');?>";
 		}
@@ -137,20 +135,12 @@ class Creator extends CI_Controller {
 		}
 	}
 
-	public function file_content_creator($type, $table_name){
-
-		if($type == "controller"){
-			return $this->controller_content($table_name);
-		}
-
-	}
-
-	public function create_controller($controller_name, $fileName){
+	public function create_controller($controller_name, $fileName, $post){
 		if(!file_exists($fileName)){
 			
 			touch($fileName);
 			$fp = fopen( $fileName, 'w');
-			fwrite($fp, $this->file_content_creator("controller", $controller_name));
+			fwrite($fp, $this->controller_content_creator($controller_name, $post));
 			fclose($fp);
 			
 		}else{
@@ -158,9 +148,12 @@ class Creator extends CI_Controller {
 		}
 	}
 
-	public function controller_content($table_name){
+	public function controller_content_creator($table_name, $post){
 		
+		$home = FATHER_BASE;;
 		$db_table_name = strtolower($table_name.'_table');
+		
+		
 		$table_name_list = strtolower($table_name.'_list');
 		$table_name_list_view = strtolower($table_name.'_list_view');
 		$table_name_add = strtolower($table_name.'_add');
@@ -170,6 +163,9 @@ class Creator extends CI_Controller {
 		$table_name_update_view = strtolower($table_name.'_update_view');
 		$table_name_update_post = strtolower($table_name.'_update_post');
 		$table_name_delete = strtolower($table_name.'_delete');
+
+		$table_n = strtolower($table_name);
+		$post_link = $home.$table_n.'/'.$table_name_add_post;
 
 		$content = "<?php
 		defined('BASEPATH') OR exit('No direct script access allowed');
@@ -186,12 +182,20 @@ class Creator extends CI_Controller {
 
 				public function $table_name_add()
 				{
+					\$data['post_link'] = '$post_link';
 					\$this->load->view('$table_name_add_view', \$data);
 				}
 
 				public function $table_name_add_post()
 				{
 					//INSERT process will be here
+					\$post = \$this->input->post();
+					\$insert = \$this->db->insert('$db_table_name', \$post);
+					if(\$insert){
+						echo 'Insert Succesful';
+					}else{
+						echo 'Insert Error';
+					}
 				}
 
 				public function $table_name_update()

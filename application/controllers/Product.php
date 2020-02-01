@@ -13,12 +13,20 @@
 
 				public function product_add()
 				{
+					$data['post_link'] = 'http://localhost/aaa_auto_project/product/product_add_post';
 					$this->load->view('product_add_view', $data);
 				}
 
 				public function product_add_post()
 				{
 					//INSERT process will be here
+					$post = $this->input->post();
+					$insert = $this->db->insert('product_table', $post);
+					if($insert){
+						echo 'Insert Succesful';
+					}else{
+						echo 'Insert Error';
+					}
 				}
 
 				public function product_update()
