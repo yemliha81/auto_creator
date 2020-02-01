@@ -1,0 +1,25 @@
+
+
+.thumbnails {
+	overflow: hidden;
+	margin: 1em 0;
+	padding: 0;
+	/* text-align: center; */
+}
+
+.thumbnails li {
+	display: inline-block;
+	width: 21%;
+	margin: 0 5px;
+}
+
+.thumbnails img {
+	display: block;
+	min-width: 100%;
+	max-width: 100%;
+}
+
+.toggle {
+	display: block;
+	margin: 10px auto 1.5em;
+}
