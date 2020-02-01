@@ -21,8 +21,10 @@ class Creator extends CI_Controller {
 	{
 		
 		$post = $this->input->post();
+		$controller_name = $post['table_name'];
 
-		$query .= "CREATE TABLE IF NOT EXISTS ".$post['table_name']." (
+
+		$query .= "CREATE TABLE IF NOT EXISTS ".$post['table_name']."_table (
 					id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,";
 			foreach($post['field_name'] as $key => $val){
 			
@@ -51,6 +53,11 @@ class Creator extends CI_Controller {
 
 			if(!file_exists($fileName)){
 				touch($fileName);
+				
+				$fp = fopen( $fileName, 'w');
+				fwrite($fp, $this->file_content_creator($controller_name));
+				fclose($fp);
+				
 			}
 			
 			die("Successful!!!");
@@ -80,5 +87,66 @@ class Creator extends CI_Controller {
 
 
 	}
+
+	public function file_content_creator($table_name){
+
+
+		$table_name_list = $table_name.'_list';
+		$table_name_list_view = $table_name.'_list_view';
+		$table_name_add = $table_name.'_add';
+		$table_name_add_view = $table_name.'_add_view';
+		$table_name_add_post = $table_name.'_add_post';
+		$table_name_update = $table_name.'_update';
+		$table_name_update_view = $table_name.'_update_view';
+		$table_name_update_post = $table_name.'_update_post';
+		$table_name_delete = $table_name.'_delete';
+
+		$content = "<?php
+		defined('BASEPATH') OR exit('No direct script access allowed');
+		
+		class $table_name extends CI_Controller {
+
+			public function $table_name_list()
+			{
+				\$this->load->view('$table_name_list_view', \$data);
+			}
+
+			public function $table_name_add()
+			{
+				\$this->load->view('$table_name_add_view', \$data);
+			}
+
+			public function $table_name_add_post()
+			{
+				//INSERT process will be here
+			}
+
+			public function $table_name_update()
+			{
+				\$this->load->view('$table_name_update_view', \$data);
+			}
+
+			public function $table_name_update_post()
+			{
+				//UPDATE process will be here
+			}
+
+			public function $table_name_delete()
+			{
+				//DELETE process will be here
+			}
+			
+		}
+
+		?>";
+
+		return strval($content);
+
+	}
+
+
+
+
+
 	
 }
