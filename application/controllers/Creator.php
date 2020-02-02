@@ -84,13 +84,22 @@ class Creator extends CI_Controller {
 		
 		if($viewType == "list_view"){
 			$html .= "<?php include('includes/header.php');?>";
-			$html .= "<div class='col-sm-4'>";
-			foreach($post['field_name'] as $key => $val){
-				$html .= "<p>"; 
-				$html .= $this->return_field_html($post['field_type'][$key], $val);
-				$html .= "</p>";
-			}
-			$html .= "</div>";
+			$html .= "<div class='container'>";
+			$html .= "<table class='table'>";
+			$html .= "<?php foreach(\$item_list as \$key => \$val){ ?>";
+				$html .= "<tr>";
+					foreach($post['field_name'] as $key => $val){
+						$html .= "<td>";
+							$html .= "<?php echo \$val['$val']; ?>";
+						$html .= "</td>";
+					}
+						$html .= "<td>";
+							$html .= "<a href='' class='btn btn-info'>DETAIL</a>";
+						$html .= "</td>";
+				$html .= "</tr>";
+			$html .= "<?php } ?>";
+				
+			$html .= "</table>";
 			$html .= "<?php include('includes/footer.php');?>";
 		}
 
