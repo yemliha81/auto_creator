@@ -21,6 +21,43 @@ function img_name_generator( $desired_name ) {
     return $desired_name.'_'.time().rand(0,1000);
 }
 
+function input_type($type, $name, $value=NULL, $pk){
+	
+	if($pk == 1)
+	{
+		$input = "<input type='hidden' name='$name' value='$value' placeholder='$name'/>";
+	}else{
+		
+		if($type == "varchar")
+		{
+			$input = "<input type='text' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+		}
+		if($type == "int")
+		{
+			$input = "<input type='number' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+		}
+		if($type == "text")
+		{
+			$input = "<textarea name='$name' rows='5' class='form-control' placeholder='$name'>$value</textarea>";
+		}
+		if($type == "timestamp")
+		{
+			$input = "<input type='text' name='$name' value='$value' class='form-control datepicker' placeholder='$name'/>";
+		}
+		if($type == "float")
+		{
+			$input = "<input type='text' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+		}
+		
+	}
+	
+	
+	
+	
+	return $input;
+	
+}
+//08502223455
 
 function quick_path_maker( $full_path ) {
     if (!file_exists($full_path)) {

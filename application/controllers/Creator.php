@@ -5,7 +5,7 @@ class Creator extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('table_creator_view', $data);
+		$this->load->view('table_creator_view');
 	}
 
 	public function table_creator_post()
@@ -38,8 +38,8 @@ class Creator extends CI_Controller {
 		if($run){
 			
 			$fileName = "application/controllers/".$post['table_name'].".php";
-			$this->create_controller($controller_name, $fileName, $post);
-			$this->create_views($table_name, $post);
+			//$this->create_controller($controller_name, $fileName, $post);
+			//$this->create_views($table_name, $post);
 			
 			die("Successful!!!");
 		}else{

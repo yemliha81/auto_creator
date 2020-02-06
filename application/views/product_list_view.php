@@ -1,1 +1,0 @@
-<?php include('includes/header.php');?><div class='container'><table class='table'><?php foreach($item_list as $key => $val){ ?><tr><td><?php echo $val['pro_name']; ?></td><td><?php echo $val['pro_description']; ?></td><td><?php echo $val['insert_time']; ?></td><td><a href='' class='btn btn-info'>DETAIL</a></td></tr><?php } ?></table><?php include('includes/footer.php');?>

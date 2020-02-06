@@ -89,6 +89,7 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define('ASSETS', FATHER_BASE.'assets/');
 define('IMG', FATHER_BASE.'img/');
 
+define('CREATOR', FATHER_BASE.'creator/');
 define('TABLE_CREATOR_POST', FATHER_BASE.'creator/table_creator_post/');
 
 
