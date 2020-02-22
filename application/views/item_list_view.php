@@ -2,20 +2,20 @@
     <div class='container'>
         <table class='table'>
             <tr>
-				<?php foreach($fields as $vv){ ?>
-					<?php if(($vv->default == 1) OR ( $vv->default == "'abc'" )){ ?>
+				<?php  foreach($fields as $kk => $vv){ ?>
+					<?php if(($vv['default'] == 1) OR ( $vv['default'] == "abc" )){ ?>
 						<td>
-							<b><?php echo $vv->name;?></b>
+							<b><?php echo $vv['name'];?></b>
 						</td>
 					<?php } ?>
 				<?php } ?>
 			</tr>
 			<?php foreach($item_list as $key => $val){ ?>
                 <tr>
-                    <?php foreach($fields as $vv){ ?>
-						<?php if(($vv->default == 1) OR ( $vv->default == "'abc'" )){ ?>
+                    <?php foreach($fields as $kk => $vv){ ?>
+						<?php if(($vv['default'] == 1) OR ( $vv['default'] == "abc" )){ ?>
 							<td>
-								<?php echo $val[$vv->name];?>
+								<?php echo $val[$vv['name']];?>
 							</td>
 						<?php } ?>
 					<?php } ?>

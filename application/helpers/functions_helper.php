@@ -21,16 +21,22 @@ function img_name_generator( $desired_name ) {
     return $desired_name.'_'.time().rand(0,1000);
 }
 
-function input_type($type, $name, $value=NULL, $pk){
+function input_type($type, $name, $value=NULL, $pk, $default=NULL){
 	
 	if($pk == 1)
 	{
-		$input = "<input type='hidden' name='$name' value='$value' placeholder='$name'/>";
+		$input = "<input type='hidden' name='$name' value='$value' />";
+		return $input;
 	}else{
 		
 		if($type == "varchar")
 		{
-			$input = "<input type='text' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+			if($default == 'img'){
+				$input = "<input type='file' accept='jpg, png, jpeg' name='$name' class='form-control'/>";
+			}else{
+				$input = "<input type='text' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+			}
+			
 		}
 		if($type == "int")
 		{
@@ -42,21 +48,29 @@ function input_type($type, $name, $value=NULL, $pk){
 		}
 		if($type == "timestamp")
 		{
-			//$input = "<input type='text' name='$name' value='$value' class='form-control datepicker' placeholder='$name'/>";
-			$input = "";
+			$input = "<input type='text' name='$name' value='".date("Y-m-d H:i:s", time())."' class='form-control datepicker' placeholder='$name'/>";
 		}
 		if($type == "float")
 		{
-			$input = "<input type='text' name='$name' value='$value' class='form-control' placeholder='$name'/>";
+			$input = "<input type='number' step='0.5' name='$name' value='$value' class='form-control' placeholder='$name'/>";
 		}
-		
+		return input_div_maker($input,$name);
 	}
 	
 	
 	
-	
-	return $input;
-	
+}
+
+function input_div_maker($input,$name){
+	$divs = '<div class="row">
+				<div class="col-sm-5 field_name">
+					'.$name.'
+				</div>
+				<div class="col-sm-7">
+					'.$input.'
+				</div>
+			</div>';
+	return $divs;
 }
 //08502223455
 

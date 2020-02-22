@@ -1,5 +1,5 @@
 <?php include('includes/header.php');?>
-    <div class='col-sm-4'>
+    <div class='container'>
         <form action='<?php echo $post_link;?>' method='post'>
             <?php foreach($fields as $field){ ?>
 				<?php echo input_type($field->type, $field->name, $item_details[$field->name], $field->primary_key);?>

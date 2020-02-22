@@ -7,6 +7,12 @@
 </body>
 <script type="text/javascript" src="<?php echo ASSETS;?>js/jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo ASSETS;?>js/bootstrap.min.js"></script>
+	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  <script>
+	  $( function() {
+		$( ".datepicker" ).datepicker();
+	  } );
+	  </script>
 </html>
 
 <script>

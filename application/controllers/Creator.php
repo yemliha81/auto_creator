@@ -26,6 +26,8 @@ class Creator extends CI_Controller {
 					$query .= "".$val." ".$post['field_type'][$key]." ".$post['null'][$key]." ,";
 				}elseif($type == "text"){
 					$query .= "".$val." ".$post['field_type'][$key]."  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
+				}elseif($type == "file"){
+					$query .= "".$val." varchar(255)  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." DEFAULT 'img' ,";
 				}else{
 					$query .= "".$val." ".$post['field_type'][$key]."   (".$post['char_length'][$key].")  ".$this->utf_8($post['field_type'][$key])."  ".$post['null'][$key]." ,";
 				}
@@ -33,7 +35,7 @@ class Creator extends CI_Controller {
 			}
 		$query = substr($query, 0, -1);
 		$query .= " ) ;";
-		
+		//debug($query);
 		$run = $this->db->query($query);
 
 		if($run){
