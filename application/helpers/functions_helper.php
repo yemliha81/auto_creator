@@ -42,7 +42,8 @@ function input_type($type, $name, $value=NULL, $pk){
 		}
 		if($type == "timestamp")
 		{
-			$input = "<input type='text' name='$name' value='$value' class='form-control datepicker' placeholder='$name'/>";
+			//$input = "<input type='text' name='$name' value='$value' class='form-control datepicker' placeholder='$name'/>";
+			$input = "";
 		}
 		if($type == "float")
 		{

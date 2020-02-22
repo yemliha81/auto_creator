@@ -12,6 +12,7 @@ class Creator extends CI_Controller {
 	{
 		
 		$post = $this->input->post();
+		//debug($post);
 		$controller_name = $post['table_name'];
 		$table_name = strtolower($post['table_name']);
 
@@ -37,7 +38,7 @@ class Creator extends CI_Controller {
 
 		if($run){
 			
-			$fileName = "application/controllers/".$post['table_name'].".php";
+			//$fileName = "application/controllers/".$post['table_name'].".php";
 			//$this->create_controller($controller_name, $fileName, $post);
 			//$this->create_views($table_name, $post);
 			

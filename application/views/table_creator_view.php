@@ -41,6 +41,7 @@ var row = '<div class="row_content first_row">\
 					<option value="float">float</option>\
 					<option value="boolean">boolean</option>\
 					<option value="timestamp DEFAULT current_timestamp">timestamp</option>\
+					<option value="varchar">file</option>\
 				</select>\
 			</div>\
 			<div class="col-sm-3">\
